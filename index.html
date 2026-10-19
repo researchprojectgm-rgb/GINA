@@ -50,18 +50,40 @@ nav.nv{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px sol
 .chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:.2rem .7rem;cursor:pointer;font:inherit;font-size:.85rem}
 @media(max-width:520px){.hb b{font-size:.9rem}h2{font-size:1.35rem}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+#focus{scroll-margin-top:70px}
+.bar2{height:6px;background:#e1e8ea;border-radius:9px;margin:.35rem 0 1rem;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--ac);transition:width .25s}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;gap:.6rem;align-items:stretch}
+.bx{background:#f4f8f8;border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem}
+.arw{align-self:center;font-size:1.6rem;color:var(--ac)}
+.q2{font-family:Newsreader,Georgia,serif;font-size:1.3rem;margin:1rem 0 .6rem;line-height:1.3}
+.sc5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sb{border:2px solid transparent;border-radius:10px;padding:.8rem .1rem;cursor:pointer;font:inherit;display:flex;flex-direction:column;align-items:center;gap:.1rem;min-height:70px}
+.sb b{font-size:1.15rem}.sb small{font-size:.72rem}.sb:hover{filter:brightness(.94)}
+.v0,.c0{background:#d4ebe8;color:var(--ink)}.v1,.c1{background:#9dd2cc;color:var(--ink)}.v2,.c2{background:#5fb5ae;color:var(--ink)}.v3,.c3{background:#1f7474;color:#fff}.v4,.c4{background:#093d3d;color:#fff}
+.sb.on{border-color:#f2b233;box-shadow:0 0 0 2px #f2b233}.sb.on small::before{content:"✓ "}
+.fn{display:flex;justify-content:space-between;gap:.5rem}
+#grid{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;margin-top:.7rem}
+.gh{font-size:.68rem;text-align:center;align-self:center;color:var(--mut)}.gh.hl{color:var(--ink);font-weight:700}.gh.dn{color:var(--ac);font-weight:700}
+.gc{aspect-ratio:1;border:1px solid #c3d0d4;border-radius:5px;background:#fff;padding:0;font:600 .6rem "Public Sans",sans-serif;cursor:pointer}
+.gd{aspect-ratio:1;background:repeating-linear-gradient(45deg,#e4ebed,#e4ebed 3px,#fff 3px,#fff 6px);border-radius:5px}
+.gc.cur{outline:3px solid #f2b233;outline-offset:1px;position:relative;z-index:1}
+.gtop{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:5.2rem;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:.5rem 1rem;border-radius:99px;opacity:0;pointer-events:none;transition:.2s;z-index:9;font-size:.9rem;max-width:92%;text-align:center}#toast.on{opacity:1;transform:translate(-50%,0)}
+dialog{max-width:700px;width:92%;max-height:85vh;border:0;border-radius:12px;padding:1rem;color:var(--ink)}dialog::backdrop{background:#0008}
+@media(max-width:560px){.pair{grid-template-columns:1fr}.arw{transform:rotate(90deg);justify-self:center}.sb small{font-size:.62rem}}
 </style>
 </head>
 <body>
 <header><div class="hb"><b id="ttl"></b><div class="lang" role="group" aria-label="Language / Idioma"><button data-l="es">ES</button><button data-l="en">EN</button></div></div></header>
 <div class="bar" role="progressbar" aria-label="progress"><i id="pg"></i></div>
 <main id="app"></main>
+<dialog id="dlg"></dialog><div id="toast" role="status" aria-live="polite"></div>
 <nav class="nv"><div class="nb"><button class="btn g" id="bk"></button><span class="mut" id="ct"></span><button class="btn" id="nx"></button></div></nav>
 
 <script>
 /* ============ CONFIGURACIÓN ============ */
-const ENDPOINT = "https://docs.google.com/spreadsheets/d/1dWXgJUrJIhfw-gd243usTz6zoBOfxVwQNrm1H6vW3Pw/edit?gid=0#gid=0";
-const KEY = "gina_spsm5_v1";
+const ENDPOINT = "PEGAR_AQUI_URL_EXEC_DE_GOOGLE_APPS_SCRIPT";
+const KEY = "gina_spsm5_v2";
 
 /* ============ CONTENIDO ============ */
 const U = {
@@ -128,107 +150,155 @@ const B=[
 /* normaliza B: [nombre en|es, desc en|es] */
 B[11][0]="Cross-Border Data Sovereignty|Soberanía de datos transfronteriza";B[11][1]=B[11][2];
 
+/* ============ TEXTOS NUEVOS ============ */
+Object.assign(U.es,{how:"Cómo funciona: 1) Su perfil (2 min). 2) Valore con un toque la influencia entre barreras: la encuesta avanza sola. 3) Envíe.",
+ mt:"Matriz de influencia",ask2:"Para cada par, elija cuánto intensifica o agrava la barrera de la fila a la de la columna. Al responder, pasa sola al siguiente par.",
+ q:"¿Cuánto intensifica o agrava {a} a {b}?",fr:"Barrera que influye (fila)",to:"Barrera influida (columna)",
+ prev:"Anterior",skip:"Saltar",bars:"Ver las 12 barreras",close:"Cerrar",grid:"Su avance: toque una celda para ir a ese par",
+ left2:"Quedan",min:"min aprox.",rowdone:"completa",alldone:"¡Listo! Completó los 132 pares.",cont:"Continuar",
+ w:{VL:"Muy bajo",L:"Bajo",M:"Medio",H:"Alto",VH:"Muy alto"},tip:"En computador: teclas 1–5 para responder, ← → para moverse.",
+ gofirst:"Ir al primer par pendiente",miss:"Faltan pares por valorar. Lo llevamos al primero pendiente.",
+ nocfg:"Aviso para el investigador: falta pegar la URL de Google Apps Script (ENDPOINT) en el archivo."});
+Object.assign(U.en,{how:"How it works: 1) Your profile (2 min). 2) Rate the influence between barriers with one tap: the survey moves on by itself. 3) Submit.",
+ mt:"Influence matrix",ask2:"For each pair, choose how strongly the barrier in the row intensifies or aggravates the one in the column. After you answer, it moves to the next pair.",
+ q:"How strongly does {a} intensify or aggravate {b}?",fr:"Influencing barrier (row)",to:"Influenced barrier (column)",
+ prev:"Previous",skip:"Skip",bars:"See the 12 barriers",close:"Close",grid:"Your progress: tap a cell to go to that pair",
+ left2:"Left",min:"min approx.",rowdone:"complete",alldone:"Done! You completed all 132 pairs.",cont:"Continue",
+ w:{VL:"Very low",L:"Low",M:"Medium",H:"High",VH:"Very high"},tip:"On a computer: keys 1–5 to answer, ← → to move.",
+ gofirst:"Go to the first pending pair",miss:"Some pairs are still missing. We took you to the first one.",
+ nocfg:"Researcher notice: the Google Apps Script URL (ENDPOINT) has not been pasted into the file."});
+const CC="AF AL DZ AD AO AG AR AM AU AT AZ BS BH BD BB BY BE BZ BJ BT BO BA BW BR BN BG BF BI CV KH CM CA CF TD CL CN CO KM CG CD CR CI HR CU CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FJ FI FR GA GM GE DE GH GR GD GT GN GW GY HT HN HK HU IS IN ID IR IQ IE IL IT JM JP JO KZ KE KI KW KG LA LV LB LS LR LY LI LT LU MG MW MY MV ML MT MH MR MU MX FM MD MC MN ME MA MZ MM NA NR NP NL NZ NI NE NG KP MK NO OM PK PW PS PA PG PY PE PH PL PT PR QA RO RU RW KN LC VC WS SM ST SA SN RS SC SL SG SK SI SB SO ZA KR SS ES LK SD SR SE CH SY TW TJ TZ TH TL TG TO TT TN TR TM TV UG UA AE GB US UY UZ VU VA VE VN YE ZM ZW".split(" ");
+
 /* ============ ESTADO ============ */
-const SC=["VL","L","M","H","VH"], NB=12, LAST=NB+2;
+const SC=["VL","L","M","H","VH"],NB=12;
+const P=[],PI={};for(let f=0;f<NB;f++)for(let j=0;j<NB;j++)if(f!==j){PI[f+"-"+j]=P.length;P.push([f,j])}
 const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2);
-let S={lang:(navigator.language||"es").startsWith("en")?"en":"es",step:0,id:uid(),p:{},o:{},m:{},x:"",sent:false};
+let S={lang:(navigator.language||"es").startsWith("en")?"en":"es",step:0,cur:0,id:uid(),p:{},o:{},m:{},x:"",sent:false};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
-const L=()=>S.lang==="es"?1:0, t=k=>U[S.lang][k], pick=s=>s.split("|")[L()];
+const L=()=>S.lang==="es"?1:0,t=k=>U[S.lang][k],pick=s=>s.split("|")[L()];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const app=document.getElementById("app");
-let showErr=false;
-
-/* ============ VALIDACIÓN ============ */
-const pErr=i=>{const v=S.p[i];if(!v)return true;if(v==="Other"&&!(S.o[i]||"").trim())return true;return false};
+const $=id=>document.getElementById(id),app=$("app");
+let showErr=false,tm,tt;
+const pErr=i=>{const v=S.p[i];if(!v)return true;return v==="Other"&&!(S.o[i]||"").trim()};
 const profileOk=()=>[...Array(10).keys()].every(i=>!pErr(i));
 const rowMissing=f=>[...Array(NB).keys()].filter(j=>j!==f&&!S.m[f+"-"+j]);
 const total=()=>Object.keys(S.m).length;
+const nextOpen=from=>{for(let k=1;k<=P.length;k++){const i=(from+k)%P.length;if(!S.m[P[i][0]+"-"+P[i][1]])return i}return -1};
 
 /* ============ RENDER ============ */
+function progress(){const pf=[...Array(10).keys()].filter(i=>!pErr(i)).length/10;
+ $("pg").style.width=(S.sent?100:pf*10+total()/132*85)+"%";$("ct").textContent=S.step===1?total()+"/132":""}
 function render(){
- document.documentElement.lang=S.lang;
- document.getElementById("ttl").textContent=t("ttl");
+ document.documentElement.lang=S.lang;$("ttl").textContent=t("ttl");
  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
- document.getElementById("pg").style.width=(S.step/LAST*100)+"%";
- document.getElementById("bk").textContent=t("back");
- document.getElementById("bk").style.visibility=(S.step===0||S.sent)?"hidden":"visible";
- const nx=document.getElementById("nx");
- nx.textContent=S.step===LAST?t("send"):t("next");
- nx.style.display=S.sent?"none":"";
- document.getElementById("ct").textContent=S.step>=2&&S.step<=NB+1?total()+"/132":"";
- app.innerHTML=S.step===0?vProfile():S.step===1?vList():S.step<=NB+1?vMatrix(S.step-2):vFinal();
+ $("bk").textContent=t("back");$("bk").style.visibility=(S.step===0||S.sent)?"hidden":"visible";
+ const nx=$("nx");nx.disabled=false;nx.textContent=S.step===2?t("send"):t("next");nx.style.display=S.sent?"none":"";
+ progress();
+ app.innerHTML=S.step===0?vProfile():S.step===1?vMatrix():vFinal();
+ if(S.step===1){updFocus();updGrid()}
  window.scrollTo(0,0);
 }
-
+function countrySel(bad){
+ if(!window.Intl||!Intl.DisplayNames)return `<input type="text" id="p6" data-p="6" value="${esc(S.p[6]||"")}" class="${bad?"err":""}">`;
+ const en=new Intl.DisplayNames(["en"],{type:"region"}),lo=new Intl.DisplayNames([S.lang],{type:"region"});
+ const a=CC.map(c=>({v:en.of(c),l:lo.of(c)})).sort((x,y)=>x.v==="Peru"?-1:y.v==="Peru"?1:x.l.localeCompare(y.l,S.lang));
+ return `<select id="p6" data-p="6" autocomplete="country-name" class="${bad?"err":""}"><option value="">${t("sel")}</option>`+a.map(o=>`<option value="${esc(o.v)}" ${S.p[6]===o.v?"selected":""}>${esc(o.l)}</option>`).join("")+`</select>`;
+}
 function vProfile(){
  let h=`<h2>${t("hi")}</h2><div class="card"><p>${t("intro")}</p><p class="mut">${t("how")}</p></div><div class="card">`;
  for(let i=0;i<10;i++){
-  const bad=showErr&&pErr(i), q=Q[i][L()];
+  const bad=showErr&&pErr(i),q=Q[i][L()];
   h+=`<div class="f"><label class="q" for="p${i}">${i+1}. ${q}</label>`;
-  if(i===6)h+=`<input type="text" id="p6" data-p="6" value="${esc(S.p[6]||"")}" autocomplete="country-name" class="${bad?"err":""}">`;
+  if(i===6)h+=countrySel(bad);
   else if(i===9)h+=`<label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" id="p9" data-c="9" ${S.p[9]?"checked":""} style="margin-top:.35rem;width:1.1rem;height:1.1rem"><span>${Q[9][L()]}</span></label>`;
-  else{h+=`<select id="p${i}" data-p="${i}" class="${bad?"err":""}"><option value="">${t("sel")}</option>`+O[i].map(s=>{const [e]=s.split("|");return `<option value="${esc(e)}" ${S.p[i]===e?"selected":""}>${esc(pick(s))}</option>`}).join("")+`</select>`;
+  else{h+=`<select id="p${i}" data-p="${i}" class="${bad?"err":""}"><option value="">${t("sel")}</option>`+O[i].map(s=>`<option value="${esc(s.split("|")[0])}" ${S.p[i]===s.split("|")[0]?"selected":""}>${esc(pick(s))}</option>`).join("")+`</select>`;
    if(O[i].some(s=>s.startsWith("Other|")))h+=`<div class="o" id="ow${i}" ${S.p[i]==="Other"?"":"hidden"}><input type="text" data-o="${i}" placeholder="${t("other")}" value="${esc(S.o[i]||"")}" aria-label="${t("other")}" class="${bad&&S.p[i]==="Other"?"err":""}"></div>`}
   if(bad)h+=`<div class="em">${t("req")}</div>`;
   h+=`</div>`}
  return h+`</div>`;
 }
-
-function vList(){
- return `<h2>${t("bt")}</h2><p class="mut">${t("bi")}</p><div class="card"><table><tbody>`+B.map((b,i)=>`<tr><td><span class="code">F${i+1}</span></td><td><b>${pick(b[0])}</b><br><span class="mut">${pick(b[1])}</span></td></tr>`).join("")+`</tbody></table></div>`;
+function vMatrix(){
+ return `<h2>${t("mt")}</h2><div class="card"><p style="margin:0">${t("ask2")}</p><p class="mut" style="margin:.5rem 0 0">${t("asym")} ${t("tip")}</p></div>
+ <div id="focus" class="card"></div>
+ <div class="card"><div class="gtop"><b>${t("grid")}</b><button class="chips" style="border:1px solid var(--line);background:#fff;border-radius:99px;padding:.3rem .8rem;cursor:pointer;font:inherit;font-size:.85rem" data-n="bars">${t("bars")}</button></div><div id="grid"></div></div>`;
 }
-
-function vMatrix(f){
- const miss=showErr?rowMissing(f):[];
- let h=`<p class="mut" style="margin:0">${t("mi")} ${f+1} ${t("of")} ${NB}</p>
- <div class="card" style="border-top:4px solid var(--ac)"><div class="tg"><span class="code">F${f+1}</span><b>${pick(B[f][0])}</b></div><p class="mut" style="margin:.4rem 0 0">${pick(B[f][1])}</p></div>
- <h2 style="font-size:1.25rem">${t("ask")}</h2><p class="mut" style="margin:0 0 .4rem">${t("asym")}</p>
- <div class="leg">${SC.map(c=>`<span><b>${c}</b> ${t("sc")[c].split(":")[0]}</span>`).join("")}</div>`;
- if(miss.length)h+=`<div class="card warn" role="alert">${t("miss")}</div>`;
- for(let j=0;j<NB;j++){if(j===f)continue;const k=f+"-"+j,bad=miss.includes(j);
-  h+=`<fieldset class="card ${bad?"err":""}" style="margin:.6rem 0"><legend style="padding:0 .3rem"><span class="code">F${j+1}</span> <b>${pick(B[j][0])}</b></legend><div class="mut">${pick(B[j][1])}</div><div class="seg">`+SC.map(c=>`<label title="${esc(t("sc")[c])}"><input type="radio" name="m${k}" value="${c}" data-m="${k}" ${S.m[k]===c?"checked":""}><span>${c}</span></label>`).join("")+`</div></fieldset>`}
- return h;
+function updFocus(){
+ const [f,j]=P[S.cur],v=S.m[f+"-"+j],n=total(),left=132-n;
+ const box=(lab,i)=>`<div class="bx"><small class="mut">${lab}</small><div class="tg"><span class="code">F${i+1}</span><b>${pick(B[i][0])}</b></div><div class="mut" style="font-size:.88rem;margin-top:.2rem">${pick(B[i][1])}</div></div>`;
+ $("focus").innerHTML=`<div class="mut" style="display:flex;justify-content:space-between;gap:.5rem;font-size:.88rem"><span>${n}/132</span><span>${left?`${t("left2")} ${left} · ≈${Math.max(1,Math.round(left*6/60))} ${t("min")}`:""}</span></div>
+ <div class="bar2"><i style="width:${n/132*100}%"></i></div>
+ <div class="pair">${box(t("fr"),f)}<div class="arw" aria-hidden="true">→</div>${box(t("to"),j)}</div>
+ <p class="q2">${t("q").replace("{a}",`<b>F${f+1}</b>`).replace("{b}",`<b>F${j+1}</b>`)}</p>
+ <div class="sc5" role="radiogroup">${SC.map((c,k)=>`<button type="button" role="radio" aria-checked="${v===c}" class="sb v${k} ${v===c?"on":""}" data-v="${c}" title="${esc(t("sc")[c])}"><b>${c}</b><small>${t("w")[c]}</small></button>`).join("")}</div>
+ <p class="mut" style="min-height:1.5em;margin:.5rem 0;font-size:.9rem">${v?esc(t("sc")[v]):""}</p>
+ <div class="fn"><button class="btn g" data-n="-1">‹ ${t("prev")}</button>${n===132?`<button class="btn" data-n="done">${t("cont")}</button>`:""}<button class="btn g" data-n="1">${t("skip")} ›</button></div>`;
 }
-
+function updGrid(){
+ const [cf,cj]=P[S.cur];
+ let h="<i></i>"+[...Array(NB).keys()].map(j=>`<span class="gh ${j===cj?"hl":""}">F${j+1}</span>`).join("");
+ for(let f=0;f<NB;f++){h+=`<span class="gh ${f===cf?"hl":""} ${rowMissing(f).length?"":"dn"}">F${f+1}</span>`;
+  for(let j=0;j<NB;j++){if(f===j){h+='<span class="gd"></span>';continue}
+   const v=S.m[f+"-"+j];
+   h+=`<button type="button" class="gc ${v?"c"+SC.indexOf(v):""} ${f===cf&&j===cj?"cur":""}" data-g="${PI[f+"-"+j]}" aria-label="F${f+1} → F${j+1}${v?": "+v:""}">${v||""}</button>`}}
+ $("grid").innerHTML=h;
+}
 function vFinal(){
  const left=132-total();
  if(S.sent)return `<div class="card ok"><h2>${t("okT")}</h2><p>${t("thanks")}</p><p class="mut">${t("okD")}<br><b>${S.id}</b></p><button class="btn g" onclick="backup()">${t("bkp")}</button></div>`;
  let h=`<h2>${t("et")}</h2><div class="card"><label class="q" for="x">${t("ex")}</label><textarea id="x" data-x>${esc(S.x||"")}</textarea></div>`;
- h+=left?`<div class="card warn"><b>${t("left")}: ${left}</b><div class="chips" style="margin-top:.5rem">`+[...Array(NB).keys()].filter(f=>rowMissing(f).length).map(f=>`<button data-go="${f+2}">F${f+1} (${rowMissing(f).length})</button>`).join("")+`</div></div>`:`<div class="card ok">${t("all")}</div>`;
- if(!profileOk())h+=`<div class="card warn"><button class="chips" style="border:0;background:none;cursor:pointer" data-go="0">${t("req")} → ${t("hi")}</button></div>`;
+ h+=left?`<div class="card warn"><b>${t("left")}: ${left}</b><p><button class="btn g" data-n="first">${t("gofirst")}</button></p></div>`:`<div class="card ok">${t("all")}</div>`;
+ if(!profileOk())h+=`<div class="card warn"><button class="btn g" data-n="profile">${t("req")} → ${t("hi")}</button></div>`;
  if(ENDPOINT.startsWith("PEGAR"))h+=`<div class="card warn mut">${t("nocfg")}</div>`;
  if(S.err)h+=`<div class="card warn" role="alert">${t("fail")}</div><button class="btn g" onclick="backup()">${t("bkp")}</button>`;
  return h;
 }
 
-/* ============ EVENTOS ============ */
+/* ============ INTERACCIÓN ============ */
+function toast(m){const el=$("toast");el.textContent=m;el.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>el.classList.remove("on"),1900)}
+function go(i){S.cur=i;save();updFocus();updGrid()}
+function setVal(v){
+ const [f,j]=P[S.cur],had=rowMissing(f).length===0;
+ S.m[f+"-"+j]=v;save();updFocus();updGrid();progress();
+ if(!had&&rowMissing(f).length===0)toast(t("mi")+" F"+(f+1)+" "+t("rowdone"));
+ clearTimeout(tm);tm=setTimeout(()=>{const n=nextOpen(S.cur);if(n>=0)go(n);else toast(t("alldone"))},180);
+}
 app.addEventListener("change",e=>{const d=e.target.dataset;
- if(d.p!==undefined){S.p[d.p]=e.target.value;if(O[d.p]){const w=document.getElementById("ow"+d.p);if(w)w.hidden=e.target.value!=="Other"}}
+ if(d.p!==undefined){S.p[d.p]=e.target.value;if(O[d.p]){const w=$("ow"+d.p);if(w)w.hidden=e.target.value!=="Other"}}
  else if(d.c!==undefined)S.p[d.c]=e.target.checked?"Yes, I agree":"";
- else if(d.m)S.m[d.m]=e.target.value;
- save();
- if(d.m){const f=+d.m.split("-")[0];const fs=e.target.closest("fieldset");if(fs&&showErr&&!rowMissing(f).includes(+d.m.split("-")[1]))fs.classList.remove("err");document.getElementById("ct").textContent=total()+"/132"}
-});
+ save();progress()});
 app.addEventListener("input",e=>{const d=e.target.dataset;
- if(d.o!==undefined)S.o[d.o]=e.target.value;else if(d.x!==undefined)S.x=e.target.value;
- else if(d.p==="6")S.p[6]=e.target.value;save()});
-app.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g){S.step=+g.dataset.go;showErr=true;save();render()}});
+ if(d.o!==undefined)S.o[d.o]=e.target.value;else if(d.x!==undefined)S.x=e.target.value;else if(d.p==="6")S.p[6]=e.target.value;save()});
+app.addEventListener("click",e=>{
+ const v=e.target.closest("[data-v]");if(v){setVal(v.dataset.v);return}
+ const g=e.target.closest("[data-g]");if(g){go(+g.dataset.g);$("focus").scrollIntoView({behavior:"smooth",block:"start"});return}
+ const n=e.target.closest("[data-n]");if(!n)return;const k=n.dataset.n;
+ if(k==="-1"||k==="1")go((S.cur+(+k)+P.length)%P.length);
+ else if(k==="done"){S.step=2;save();render()}
+ else if(k==="first"){S.step=1;S.cur=nextOpen(P.length-1);save();render()}
+ else if(k==="profile"){S.step=0;showErr=true;render()}
+ else if(k==="bars"){$("dlg").innerHTML=`<table><tbody>`+B.map((b,i)=>`<tr><td><span class="code">F${i+1}</span></td><td><b>${pick(b[0])}</b><br><span class="mut">${pick(b[1])}</span></td></tr>`).join("")+`</tbody></table><p><button class="btn" onclick="document.getElementById('dlg').close()">${t("close")}</button></p>`;$("dlg").showModal()}
+});
 document.querySelector(".lang").addEventListener("click",e=>{if(e.target.dataset.l){S.lang=e.target.dataset.l;save();render()}});
-document.getElementById("bk").onclick=()=>{S.step=Math.max(0,S.step-1);showErr=false;save();render()};
-document.getElementById("nx").onclick=()=>{
- if(S.step===0&&!profileOk()){showErr=true;render();const el=document.querySelector(".err");el&&el.scrollIntoView({block:"center"});return}
- if(S.step>=2&&S.step<=NB+1&&rowMissing(S.step-2).length){showErr=true;render();const el=document.querySelector(".err");el&&el.scrollIntoView({block:"center"});return}
- if(S.step===LAST){submit();return}
- showErr=false;S.step++;save();render();
+$("bk").onclick=()=>{S.step=Math.max(0,S.step-1);showErr=false;save();render()};
+$("nx").onclick=()=>{
+ if(S.step===0){if(!profileOk()){showErr=true;render();const el=document.querySelector(".err");el&&el.scrollIntoView({block:"center"});return}S.step=1;save();render();return}
+ if(S.step===1){if(total()<132){go(nextOpen(P.length-1));toast(t("miss"));$("focus").scrollIntoView({behavior:"smooth",block:"start"});return}S.step=2;save();render();return}
+ submit();
 };
+document.addEventListener("keydown",e=>{
+ if(S.step!==1||e.ctrlKey||e.metaKey||e.altKey||e.target.matches("input,textarea,select")||$("dlg").open)return;
+ if(["1","2","3","4","5"].includes(e.key))setVal(SC[+e.key-1]);
+ else if(e.key==="ArrowLeft")go((S.cur+P.length-1)%P.length);
+ else if(e.key==="ArrowRight")go((S.cur+1)%P.length);
+});
 
 /* ============ ENVÍO ============ */
 function payload(){
- const P={};for(let i=0;i<10;i++)P["P"+(i+1)]=S.p[i]||"";
- for(const i in S.o)if(S.p[i]==="Other")P["P"+(+i+1)+"_other"]=S.o[i];
- const J=[];for(let f=0;f<NB;f++)for(let j=0;j<NB;j++)if(f!==j)J.push({responseId:S.id,from:"F"+(f+1),to:"F"+(j+1),value:S.m[f+"-"+j]||""});
- return Object.assign({responseId:S.id,timestamp:new Date().toISOString(),language:S.lang,extraBarrier:S.x||"",matrix:J.map(r=>r.from+">"+r.to+"="+r.value).join(";"),judgments:J},P);
+ const Pr={};for(let i=0;i<10;i++)Pr["P"+(i+1)]=S.p[i]||"";
+ for(const i in S.o)if(S.p[i]==="Other")Pr["P"+(+i+1)+"_other"]=S.o[i];
+ const J=P.map(([f,j])=>({responseId:S.id,from:"F"+(f+1),to:"F"+(j+1),value:S.m[f+"-"+j]||""}));
+ return Object.assign({responseId:S.id,timestamp:new Date().toISOString(),language:S.lang,extraBarrier:S.x||"",judgments:J},Pr);
 }
 function backup(){
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(payload(),null,2)],{type:"application/json"}));
@@ -237,12 +307,10 @@ function backup(){
 async function submit(){
  showErr=true;
  if(!profileOk()){S.step=0;render();return}
- const miss=[...Array(NB).keys()].find(f=>rowMissing(f).length!==0);
- if(miss!==undefined){S.step=miss+2;render();return}
- const b=document.getElementById("nx");b.disabled=true;b.textContent=t("sending");S.err=false;
+ if(total()<132){S.step=1;S.cur=nextOpen(P.length-1);render();return}
+ const b=$("nx");b.disabled=true;b.textContent=t("sending");S.err=false;
  try{
   if(ENDPOINT.startsWith("PEGAR"))throw new Error("no endpoint");
-  /* text/plain + no-cors evita el preflight CORS; el responseId permite eliminar duplicados */
   await fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(payload())});
   S.sent=true;
  }catch(e){S.err=true}
