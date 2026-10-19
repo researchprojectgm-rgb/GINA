@@ -59,7 +59,7 @@ nav.nv{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px sol
 .sc5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .sb{border:2px solid transparent;border-radius:10px;padding:.8rem .1rem;cursor:pointer;font:inherit;display:flex;flex-direction:column;align-items:center;gap:.1rem;min-height:70px}
 .sb b{font-size:1.15rem}.sb small{font-size:.72rem}.sb:hover{filter:brightness(.94)}
-.v0,.c0{background:#d4ebe8;color:var(--ink)}.v1,.c1{background:#9dd2cc;color:var(--ink)}.v2,.c2{background:#5fb5ae;color:var(--ink)}.v3,.c3{background:#1f7474;color:#fff}.v4,.c4{background:#093d3d;color:#fff}
+.v0,.gc.c0{background:#d4ebe8;color:var(--ink)}.v1,.gc.c1{background:#9dd2cc;color:var(--ink)}.v2,.gc.c2{background:#5fb5ae;color:var(--ink)}.v3,.gc.c3{background:#1f7474;color:#fff}.v4,.gc.c4{background:#093d3d;color:#fff}
 .sb.on{border-color:#f2b233;box-shadow:0 0 0 2px #f2b233}.sb.on small::before{content:"✓ "}
 .fn{display:flex;justify-content:space-between;gap:.5rem}
 #grid{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;margin-top:.7rem}
@@ -71,7 +71,7 @@ nav.nv{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px sol
 #toast{position:fixed;left:50%;bottom:5.2rem;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:.5rem 1rem;border-radius:99px;opacity:0;pointer-events:none;transition:.2s;z-index:9;font-size:.9rem;max-width:92%;text-align:center}#toast.on{opacity:1;transform:translate(-50%,0)}
 dialog{max-width:700px;width:92%;max-height:85vh;border:0;border-radius:12px;padding:1rem;color:var(--ink)}dialog::backdrop{background:#0008}
 @media(max-width:560px){.pair{grid-template-columns:1fr}.arw{transform:rotate(90deg);justify-self:center}.sb small{font-size:.62rem}}
-</style>
+main.wide{max-width:1180px}@media(min-width:980px){.mx{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:1rem;align-items:start}.mx .card{margin:.8rem 0}.gcard{position:sticky;top:70px}#grid{gap:4px}.gc{font-size:.74rem}}</style>
 </head>
 <body>
 <header><div class="hb"><b id="ttl"></b><div class="lang" role="group" aria-label="Language / Idioma"><button data-l="es">ES</button><button data-l="en">EN</button></div></div></header>
@@ -82,7 +82,7 @@ dialog{max-width:700px;width:92%;max-height:85vh;border:0;border-radius:12px;pad
 
 <script>
 /* ============ CONFIGURACIÓN ============ */
-const ENDPOINT = https://docs.google.com/spreadsheets/d/1dWXgJUrJIhfw-gd243usTz6zoBOfxVwQNrm1H6vW3Pw/edit?gid=0#gid=0;
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwaJiN1nJPW1c2zPsU4I2oUNrSG-CJ0XsNoJFK03sgVcdcZLqPtb-3rw1i816HykWyr/exec";
 const KEY = "gina_spsm5_v2";
 
 /* ============ CONTENIDO ============ */
@@ -194,7 +194,7 @@ function render(){
  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
  $("bk").textContent=t("back");$("bk").style.visibility=(S.step===0||S.sent)?"hidden":"visible";
  const nx=$("nx");nx.disabled=false;nx.textContent=S.step===2?t("send"):t("next");nx.style.display=S.sent?"none":"";
- progress();
+ progress();app.classList.toggle("wide",S.step===1);
  app.innerHTML=S.step===0?vProfile():S.step===1?vMatrix():vFinal();
  if(S.step===1){updFocus();updGrid()}
  window.scrollTo(0,0);
@@ -220,8 +220,8 @@ function vProfile(){
 }
 function vMatrix(){
  return `<h2>${t("mt")}</h2><div class="card"><p style="margin:0">${t("ask2")}</p><p class="mut" style="margin:.5rem 0 0">${t("asym")} ${t("tip")}</p></div>
- <div id="focus" class="card"></div>
- <div class="card"><div class="gtop"><b>${t("grid")}</b><button class="chips" style="border:1px solid var(--line);background:#fff;border-radius:99px;padding:.3rem .8rem;cursor:pointer;font:inherit;font-size:.85rem" data-n="bars">${t("bars")}</button></div><div id="grid"></div></div>`;
+ <div class="mx"><div id="focus" class="card"></div>
+ <div class="card gcard"><div class="gtop"><b>${t("grid")}</b><button class="chips" style="border:1px solid var(--line);background:#fff;border-radius:99px;padding:.3rem .8rem;cursor:pointer;font:inherit;font-size:.85rem" data-n="bars">${t("bars")}</button></div><div id="grid"></div></div></div>`;
 }
 function updFocus(){
  const [f,j]=P[S.cur],v=S.m[f+"-"+j],n=total(),left=132-n;
