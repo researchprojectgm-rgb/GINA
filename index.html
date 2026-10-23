@@ -77,6 +77,9 @@ main.wide{max-width:1180px}@media(min-width:980px){.mx{display:grid;grid-templat
 .qc{background:#f2b233;color:var(--ink);border-radius:6px;padding:0 .45rem;white-space:nowrap}
 .note{background:#e6f2f1;border-left:4px solid var(--ac);border-radius:6px;padding:.6rem .8rem;margin:.6rem 0 0;font-size:.98rem}
 @media(max-width:560px){.qb{font-size:1.35rem}}
+#focus{container-type:inline-size}
+.pair{gap:.8rem;margin-bottom:1.3rem}.bx{padding:.8rem 1rem}.sc5{margin-top:.3rem}.q2{display:none}
+@container (max-width:600px){.pair{grid-template-columns:1fr}.arw{transform:rotate(90deg);justify-self:center;line-height:1}}
 </style>
 </head>
 <body>
@@ -187,13 +190,14 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const $=id=>document.getElementById(id),app=$("app");
 let showErr=false,tm,tt;
 const pErr=i=>{const v=S.p[i];if(!v)return true;return v==="Other"&&!(S.o[i]||"").trim()};
-const profileOk=()=>[...Array(10).keys()].every(i=>!pErr(i));
+const PQ=[3,2,5,6,4,1,7,8,9];/* cargo, años, educación, país, sector, tamaño, familiaridad, participación IA, consentimiento */
+const profileOk=()=>PQ.every(i=>!pErr(i));
 const rowMissing=f=>[...Array(NB).keys()].filter(j=>j!==f&&!S.m[f+"-"+j]);
 const total=()=>Object.keys(S.m).length;
 const nextOpen=from=>{for(let k=1;k<=P.length;k++){const i=(from+k)%P.length;if(!S.m[P[i][0]+"-"+P[i][1]])return i}return -1};
 
 /* ============ RENDER ============ */
-function progress(){const pf=[...Array(10).keys()].filter(i=>!pErr(i)).length/10;
+function progress(){const pf=PQ.filter(i=>!pErr(i)).length/PQ.length;
  $("pg").style.width=(S.sent?100:pf*10+total()/132*85)+"%";$("ct").textContent=S.step===1?total()+"/132":""}
 function render(){
  document.documentElement.lang=S.lang;$("ttl").textContent=t("ttl");$("rs").textContent=t("rs");
@@ -213,9 +217,9 @@ function countrySel(bad){
 }
 function vProfile(){
  let h=`<h2>${t("hi")}</h2><div class="card"><p>${t("intro")}</p><p class="mut">${t("how")}</p><p class="note">${t("note")}</p></div><div class="card">`;
- for(let i=0;i<10;i++){
+ for(let n=0;n<PQ.length;n++){const i=PQ[n];
   const bad=showErr&&pErr(i),q=Q[i][L()];
-  h+=`<div class="f"><label class="q" for="p${i}">${i+1}. ${q}</label>`;
+  h+=`<div class="f"><label class="q" for="p${i}">${n+1}. ${q}</label>`;
   if(i===6)h+=countrySel(bad);
   else if(i===9)h+=`<label style="display:flex;gap:.6rem;align-items:flex-start"><input type="checkbox" id="p9" data-c="9" ${S.p[9]?"checked":""} style="margin-top:.35rem;width:1.1rem;height:1.1rem"><span>${Q[9][L()]}</span></label>`;
   else{h+=`<select id="p${i}" data-p="${i}" class="${bad?"err":""}"><option value="">${t("sel")}</option>`+O[i].map(s=>`<option value="${esc(s.split("|")[0])}" ${S.p[i]===s.split("|")[0]?"selected":""}>${esc(pick(s))}</option>`).join("")+`</select>`;
