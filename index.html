@@ -73,6 +73,10 @@ main.wide{max-width:1180px}@media(min-width:980px){.mx{display:grid;grid-templat
 .rows{display:flex;flex-wrap:wrap;gap:4px;margin:.1rem 0 .5rem}.rc{border:1px solid var(--line);background:#fff;border-radius:6px;padding:.15rem .5rem;cursor:pointer;font:inherit;font-size:.85rem}.rc.dn{background:#d4ebe8}.rc.cur{background:var(--ac);color:#fff;border-color:var(--ac)}
 .tgl{border:1px solid var(--line);background:#fff;border-radius:99px;padding:.2rem .8rem;cursor:pointer;font:inherit;font-size:.85rem;margin:0 0 .7rem}.tgl[aria-pressed=true]{background:#e6f2f1;border-color:var(--ac);color:var(--ac2)}
 .bx.pin{border-color:var(--ac);background:#e6f2f1}.badge{background:var(--ac);color:#fff;border-radius:99px;padding:0 .5rem;font-size:.75rem;margin-left:.3rem}
+.qb{background:var(--ac2);color:#fff;border-radius:10px;padding:1rem 1.1rem;margin:.4rem 0 .9rem;font-size:1.65rem;font-weight:700;line-height:1.35;box-shadow:0 2px 0 #06302f}
+.qc{background:#f2b233;color:var(--ink);border-radius:6px;padding:0 .45rem;white-space:nowrap}
+.note{background:#e6f2f1;border-left:4px solid var(--ac);border-radius:6px;padding:.6rem .8rem;margin:.6rem 0 0;font-size:.98rem}
+@media(max-width:560px){.qb{font-size:1.35rem}}
 </style>
 </head>
 <body>
@@ -208,7 +212,7 @@ function countrySel(bad){
  return `<select id="p6" data-p="6" autocomplete="country-name" class="${bad?"err":""}"><option value="">${t("sel")}</option>`+a.map(o=>`<option value="${esc(o.v)}" ${S.p[6]===o.v?"selected":""}>${esc(o.l)}</option>`).join("")+`</select>`;
 }
 function vProfile(){
- let h=`<h2>${t("hi")}</h2><div class="card"><p>${t("intro")}</p><p class="mut">${t("how")}</p></div><div class="card">`;
+ let h=`<h2>${t("hi")}</h2><div class="card"><p>${t("intro")}</p><p class="mut">${t("how")}</p><p class="note">${t("note")}</p></div><div class="card">`;
  for(let i=0;i<10;i++){
   const bad=showErr&&pErr(i),q=Q[i][L()];
   h+=`<div class="f"><label class="q" for="p${i}">${i+1}. ${q}</label>`;
@@ -221,22 +225,21 @@ function vProfile(){
  return h+`</div>`;
 }
 function vMatrix(){
- return `<h2>${t("mt")}</h2><div class="card"><p style="margin:0">${t("ask2")}</p><p class="mut" style="margin:.5rem 0 0">${t("asym")} ${t("tip")}</p></div>
+ return `<h2>${t("mt")}</h2><div class="card"><p style="margin:0">${t("ask2")}</p><p class="note" style="margin:.6rem 0 0">${t("note2")}</p><p class="mut" style="margin:.5rem 0 0">${t("asym")} ${t("tip")}</p></div>
  <div class="mx"><div id="focus" class="card"></div>
  <div class="card gcard"><div class="gtop"><b>${t("grid")}</b><button class="chips" style="border:1px solid var(--line);background:#fff;border-radius:99px;padding:.3rem .8rem;cursor:pointer;font:inherit;font-size:.85rem" data-n="bars">${t("bars")}</button></div><div id="grid"></div></div></div>`;
 }
 function updFocus(){
  const [f,j]=P[S.cur],v=S.m[f+"-"+j],n=total(),left=132-n;
- const box=(lab,i,pin)=>`<div class="bx${pin?" pin":""}"><small class="mut">${lab}${pin?` <span class="badge">${t("fixed")}</span>`:""}</small><div class="tg"><span class="code">F${i+1}</span><b>${pick(B[i][0])}</b></div><div class="mut" style="font-size:.88rem;margin-top:.2rem">${pick(B[i][1])}</div></div>`;
+ const box=(lab,i)=>`<div class="bx"><small class="mut">${lab}</small><div class="tg"><span class="code">F${i+1}</span><b>${pick(B[i][0])}</b></div><div class="mut" style="font-size:.88rem;margin-top:.2rem">${pick(B[i][1])}</div></div>`;
  $("focus").innerHTML=`<div class="mut" style="display:flex;justify-content:space-between;gap:.5rem;font-size:.88rem"><span>${n}/132</span><span>${left?`${t("left2")} ${left} · ≈${Math.max(1,Math.round(left*6/60))} ${t("min")}`:""}</span></div>
  <div class="bar2"><i style="width:${n/132*100}%"></i></div>
  <div class="rows" role="group" aria-label="${t("rowsl")}">${[...Array(NB).keys()].map(r=>`<button type="button" class="rc ${r===f?"cur":""} ${rowMissing(r).length?"":"dn"}" data-r="${r}">F${r+1}</button>`).join("")}</div>
- <button type="button" class="tgl" data-n="fix" aria-pressed="${S.fix!==false}">${t("fixl")}: ${S.fix!==false?t("on"):t("off")}</button>
- <div class="pair">${box(t("fr"),f,S.fix!==false)}<div class="arw" aria-hidden="true">→</div>${box(t("to"),j)}</div>
- <p class="q2">${t("q").replace("{a}",`<b>F${f+1}</b>`).replace("{b}",`<b>F${j+1}</b>`)}</p>
+ <div class="qb">${t("q").replace("{a}",`<span class="qc">F${f+1}</span>`).replace("{b}",`<span class="qc">F${j+1}</span>`)}</div>
+ <div class="pair">${box(t("fr"),f)}<div class="arw" aria-hidden="true">→</div>${box(t("to"),j)}</div>
  <div class="sc5" role="radiogroup">${SC.map((c,k)=>`<button type="button" role="radio" aria-checked="${v===c}" class="sb v${k} ${v===c?"on":""}" data-v="${c}" title="${esc(t("sc")[c])}"><b>${c}</b><small>${t("w")[c]}</small></button>`).join("")}</div>
  <p class="mut" style="min-height:1.5em;margin:.5rem 0;font-size:.9rem">${v?esc(t("sc")[v]):""}</p>
- <div class="fn"><button class="btn g" data-n="-1">‹ ${t("prev")}</button>${n===132?`<button class="btn" data-n="done">${t("cont")}</button>`:""}<button class="btn g" data-n="1">${t("skip")} ›</button></div>`;
+ <div class="fn"><button class="btn g" data-n="-1">‹ ${t("prev")}</button>${n===132?`<button class="btn" data-n="done">${t("cont")}</button>`:""}</div>`;
 }
 function updGrid(){
  const [cf,cj]=P[S.cur];
@@ -261,10 +264,8 @@ function vFinal(){
 /* ============ INTERACCIÓN ============ */
 function toast(m){const el=$("toast");el.textContent=m;el.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>el.classList.remove("on"),1900)}
 function go(i){S.cur=i;save();updFocus();updGrid()}
-function stepBy(d){if(S.fix===false)return (S.cur+d+P.length)%P.length;const f=P[S.cur][0],b=f*(NB-1);return b+((S.cur-b+d+NB-1)%(NB-1))}
-function advance(){if(S.fix===false)return nextOpen(S.cur);const f=P[S.cur][0],b=f*(NB-1);
- for(let k=1;k<NB;k++){const i=b+((S.cur-b+k)%(NB-1));if(!S.m[P[i][0]+"-"+P[i][1]])return i}
- return nextOpen(b+NB-2)}
+function stepBy(d){return (S.cur+d+P.length)%P.length}
+function advance(){return nextOpen(S.cur)}
 function setVal(v){
  const [f,j]=P[S.cur],had=rowMissing(f).length===0;
  S.m[f+"-"+j]=v;save();updFocus();updGrid();progress();
@@ -283,7 +284,6 @@ app.addEventListener("click",e=>{
  const r=e.target.closest("[data-r]");if(r){const b=+r.dataset.r*(NB-1);let i=b;for(let k=0;k<NB-1;k++)if(!S.m[P[b+k][0]+"-"+P[b+k][1]]){i=b+k;break}go(i);return}
  const n=e.target.closest("[data-n]");if(!n)return;const k=n.dataset.n;
  if(k==="-1"||k==="1")go(stepBy(+k));
- else if(k==="fix"){S.fix=!(S.fix!==false);save();updFocus()}
  else if(k==="done"){S.step=2;save();render()}
  else if(k==="first"){S.step=1;S.cur=nextOpen(P.length-1);save();render()}
  else if(k==="profile"){S.step=0;showErr=true;render()}
@@ -300,7 +300,7 @@ document.addEventListener("keydown",e=>{
  if(S.step!==1||e.ctrlKey||e.metaKey||e.altKey||e.target.matches("input,textarea,select")||$("dlg").open)return;
  if(["1","2","3","4","5"].includes(e.key))setVal(SC[+e.key-1]);
  else if(e.key==="ArrowLeft")go(stepBy(-1));
- else if(e.key==="ArrowRight")go(stepBy(1));
+ else if(e.key==="ArrowRight"){const i=stepBy(1);if(S.m[P[i][0]+"-"+P[i][1]])go(i)}
 });
 
 /* ============ ENVÍO ============ */
@@ -326,6 +326,14 @@ async function submit(){
  }catch(e){S.err=true}
  save();render();
 }
+Object.assign(U.es,{how:"Cómo funciona: 1) Su perfil (2 min). 2) Con un toque por par, valore la influencia entre barreras; la encuesta avanza sola. 3) Envíe sus respuestas.",
+ note:"Su experiencia es muy valiosa para este estudio. Para que el análisis sea confiable, le invitamos amablemente a completar todas las valoraciones: cada una aporta un dato clave y no se asigna ningún valor por defecto.",
+ note2:"Le invitamos a completar todas las valoraciones: cada una es clave para la calidad del estudio.",
+ miss:"Aún quedan valoraciones por completar; lo llevamos a la primera pendiente. ¡Gracias!"});
+Object.assign(U.en,{how:"How it works: 1) Your profile (2 min). 2) With one tap per pair, rate the influence between barriers; the survey moves on by itself. 3) Submit your answers.",
+ note:"Your expertise is highly valuable to this study. For the analysis to be reliable, we kindly invite you to complete all the ratings: each one provides key data and no default value is assigned.",
+ note2:"We kindly invite you to complete every rating: each one is key to the quality of the study.",
+ miss:"Some ratings are still pending; we took you to the first one. Thank you!"});
 Object.assign(U.es,{rs:"Reiniciar",rsq:"¿Borrar todas sus respuestas y volver al inicio? Esta acción no se puede deshacer.",fixed:"fija",rowsl:"Barrera de la fila",fixl:"Mantener fija la barrera de la fila"+"",on:"sí",off:"no"});
 Object.assign(U.en,{rs:"Start over",rsq:"Delete all your answers and go back to the start? This cannot be undone.",fixed:"fixed",rowsl:"Row barrier",fixl:"Keep the row barrier fixed",on:"yes",off:"no"});
 $("rs").onclick=()=>{if(!confirm(t("rsq")))return;try{localStorage.removeItem(KEY)}catch(e){}
